@@ -54,6 +54,7 @@ if __name__ == "__main__":
     print(f"Number of samples: {len(dataset)}")
 
     img, depth = dataset[0]
+
     print(f"RGB dtype: {img.shape}, dtype: {img.dtype}")
     print(f"Depth dtype: {depth.shape}, dtype: {depth.dtype}")
     print(f"Depth min: {depth.min():.2f}m, Depth max: {depth.max():.2f}m")
