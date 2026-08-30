@@ -1,0 +1,13 @@
+nyu2_test/
+nyu2_train/
+*.csv
+
+.ipynb_checkpoints/
+
+.env
+
+__pycache__/
+
+.vscode/
+
+.ruff_cache/

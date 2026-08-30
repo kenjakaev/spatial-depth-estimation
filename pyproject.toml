@@ -1,0 +1,12 @@
+[project]
+name = "spatial-depth-estimation"
+version = "0.1.0"
+description = "End-to-End Spatial-Depth-Estimation Pipeline"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I"]
