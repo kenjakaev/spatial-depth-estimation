@@ -2,3 +2,9 @@
 
 ipywidgets
 jupyter
+torch==2.5.1
+torchvision==0.20.1
+timm==1.0.29
+albumentations==2.0.8
+pandas==3.0.5
+matplotlib==3.11.1
