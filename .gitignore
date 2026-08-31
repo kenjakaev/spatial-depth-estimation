@@ -2,6 +2,8 @@ nyu2_test/
 nyu2_train/
 *.csv
 
+*.onnx
+
 .ipynb_checkpoints/
 
 .env
