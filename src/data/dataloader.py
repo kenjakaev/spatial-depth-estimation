@@ -1,9 +1,9 @@
 from torch.utils.data import DataLoader
-from .dataset import NYUDepthDataset
+from src.data.dataset import NYUDepthDataset
 
 
 def get_dataloaders(
-    base_dir, train_csv, test_csv, batch_size, num_workers=4, img_size=(224, 224)
+    base_dir, train_csv, test_csv, batch_size, num_workers=4, img_size=(384, 384)
 ):
     train_dataset = NYUDepthDataset(
         base_dir, train_csv, img_size=img_size, is_train=True
@@ -33,7 +33,7 @@ def get_dataloaders(
 
 
 if __name__ == "__main__":
-    from src.config.config import DATA_DIR, BASE_DIR
+    from src.config import DATA_DIR, BASE_DIR
 
     csv_train = DATA_DIR / "nyu2_train.csv"
     csv_test = DATA_DIR / "nyu2_test.csv"

@@ -49,7 +49,15 @@ class NYUDepthDataset(Dataset):
         depth_path = os.path.join(self.base_dir, self.df.iat[idx, 1])
 
         img_np = np.array(Image.open(img_path).convert("RGB"))
-        depth_np = np.array(Image.open(depth_path), dtype=np.float32) / 255
+
+        depth_img = Image.open(depth_path)
+
+        if depth_img.mode in ["I;16", "I", "F"]:
+            depth_np = np.array(depth_img, dtype=np.float32) / 10000.0
+        else:
+            depth_np = np.array(depth_img, dtype=np.float32) / 255.0
+
+        depth_np = np.clip(depth_np, 0.0, 1.0)
 
         augmented = self.transform(image=img_np, mask=depth_np)
         img_tensor = augmented["image"]  # [3, H, W]
@@ -59,7 +67,7 @@ class NYUDepthDataset(Dataset):
 
 
 if __name__ == "__main__":
-    from src.config.config import BASE_DIR, DATA_DIR
+    from src.config import BASE_DIR, DATA_DIR
 
     csv_train = DATA_DIR / "nyu2_train.csv"
 
