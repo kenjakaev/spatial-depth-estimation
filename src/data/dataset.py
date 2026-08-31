@@ -64,18 +64,3 @@ class NYUDepthDataset(Dataset):
         depth_tensor = augmented["mask"].unsqueeze(0)  # [1, H, W]
 
         return img_tensor, depth_tensor
-
-
-if __name__ == "__main__":
-    from src.config import BASE_DIR, DATA_DIR
-
-    csv_train = DATA_DIR / "nyu2_train.csv"
-
-    dataset = NYUDepthDataset(base_dir=BASE_DIR, csv_file=csv_train, is_train=True)
-    print(f"Number of samples: {len(dataset)}")
-
-    img, depth = dataset[0]
-
-    print(f"RGB dtype: {img.shape}, dtype: {img.dtype}")
-    print(f"Depth dtype: {depth.shape}, dtype: {depth.dtype}")
-    print(f"Depth min: {depth.min():.2f}m, Depth max: {depth.max():.2f}m")
