@@ -1,5 +1,18 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
+
+
+def denormalize_img(
+    img_tensor,
+    mean=(0.485, 0.456, 0.406),
+    std=(0.229, 0.224, 0.225),
+):
+    img = img_tensor.cpu().numpy().transpose(1, 2, 0)  # C, H, W -> H, W, C
+    mean = np.array(mean)
+    std = np.array(std)
+    img = std * img + mean
+    return np.clip(img, 0, 1)
 
 
 def draw_sample(model, test_loader, device="cpu"):
@@ -11,9 +24,9 @@ def draw_sample(model, test_loader, device="cpu"):
             preds = torch.clamp(preds, min=0.0)
             break
 
-    img = X_test[0].cpu().permute(1, 2, 0).numpy()
-    gt_depth = y_test[0].cpu().squeeze().numpy()
-    pred_depth = preds[0].cpu().squeeze().numpy()
+    img = denormalize_img(X_test[0])
+    gt_depth = y_test[0].cpu().squeeze().numpy() * 10.0
+    pred_depth = preds[0].cpu().squeeze().numpy() * 10.0
 
     fig, ax = plt.subplots(1, 3, figsize=(15, 5))
     ax[0].imshow(img)

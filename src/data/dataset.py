@@ -8,23 +8,36 @@ import numpy as np
 
 
 class NYUDepthDataset(Dataset):
-    def __init__(self, base_dir, csv_file, img_size=(224, 224), is_train=True):
+    def __init__(self, base_dir, csv_file, img_size=(384, 384), is_train=True):
         self.base_dir = base_dir
         self.img_size = img_size
         self.is_train = is_train
         self.df = pd.read_csv(csv_file, header=None)
 
-        transforms_list = [A.Resize(*self.img_size)]
+        spatial_transforms = [
+            A.Resize(*self.img_size),
+        ]
 
         if self.is_train:
-            transforms_list.append(A.HorizontalFlip(p=0.5))
-
-        transforms_list.extend(
-            [
-                A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
-                ToTensorV2(),
+            spatial_transforms.append(A.HorizontalFlip(p=0.5))
+            color_transforms = [
+                A.CLAHE(clip_limit=2.0, tile_grid_size=(8, 8), p=0.3),
+                A.RandomBrightnessContrast(
+                    brightness_limit=0.2, contrast_limit=0.2, p=0.4
+                ),
+                A.ColorJitter(
+                    brightness=0.1, contrast=0.1, saturation=0.1, hue=0.05, p=0.3
+                ),
             ]
-        )
+        else:
+            color_transforms = []
+
+        final_transforms = [
+            A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
+            ToTensorV2(),
+        ]
+
+        transforms_list = spatial_transforms + color_transforms + final_transforms
 
         self.transform = A.Compose(transforms_list, additional_targets={"mask": "mask"})
 
@@ -36,7 +49,7 @@ class NYUDepthDataset(Dataset):
         depth_path = os.path.join(self.base_dir, self.df.iat[idx, 1])
 
         img_np = np.array(Image.open(img_path).convert("RGB"))
-        depth_np = np.array(Image.open(depth_path), dtype=np.float32) / 25.5
+        depth_np = np.array(Image.open(depth_path), dtype=np.float32) / 255
 
         augmented = self.transform(image=img_np, mask=depth_np)
         img_tensor = augmented["image"]  # [3, H, W]

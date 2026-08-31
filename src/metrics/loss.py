@@ -10,9 +10,10 @@ class DepthLoss(nn.Module):
         self.l1 = nn.L1Loss()
 
     def forward(self, pred, target):
-        pred_log = torch.log(torch.clamp(pred, min=self.eps))
-        target_log = torch.log(torch.clamp(target, min=self.eps))
+        pred_log = torch.log1p(torch.clamp(pred, min=self.eps))
+        target_log = torch.log1p(torch.clamp(target, min=self.eps))
         loss = self.l1(pred_log, target_log)
+
         if self.alpha == 0:
             return loss
         else:
