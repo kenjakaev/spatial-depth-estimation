@@ -1,4 +1,4 @@
-# 🗺️ Monocular Depth Estimation Microservice
+# 👁️ Monocular Depth Estimation Microservice
 
 A production-ready REST API microservice for single-image Monocular Depth Estimation. Built with a custom U-Net-like architecture (ResNet Encoder + Custom Decoder with Skip-Connections), exported to ONNX for high-speed CPU inference, and packaged into a lightweight Docker container powered by FastAPI.
 
