@@ -17,6 +17,7 @@ A production-ready REST API microservice for single-image Monocular Depth Estima
 
 ## 🏗️ System Architecture
 
+```text
 [ Input Image (RGB) ]
          │
          ▼
@@ -41,6 +42,7 @@ A production-ready REST API microservice for single-image Monocular Depth Estima
          │
          ▼
 [ Binary Image Output ]
+```
 
 ---
 
